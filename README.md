@@ -46,3 +46,4 @@ project_order
 ## 3.开启项目
 1.  获取依赖
 2.  运行 main.go 中 main函数
+3.  运行 localhost:8080/version/ 端口查看是否运行成功
