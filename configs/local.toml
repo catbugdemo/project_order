@@ -1,0 +1,22 @@
+[http]
+    port=":8080"
+    read_timeout=60
+    write_timeout=60
+
+[database]
+    host="127.0.0.1"
+    dbname="postgres"
+    user="postgres"
+    password="123456"
+    sslmode="disable"
+
+[redis]
+    host="127.0.0.1:6379"
+    password=""
+    max_idle=10
+    max_active=10
+
+[rocketmq]
+    server = [
+    "127.0.0.1:9876"
+     ]
