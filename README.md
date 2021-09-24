@@ -1,6 +1,7 @@
 ## 个人快速建立一个简单的项目
 
-
+[![Build Status](https://app.travis-ci.com/catbugdemo/project_order.svg?branch=master)](https://app.travis-ci.com/catbugdemo/project_order)
+[![Go Report Card](https://goreportcard.com/badge/github.com/catbugdemo/project_order)](https://goreportcard.com/report/github.com/catbugdemo/project_order)
 
 ### 1.项目结构体
 ```text
