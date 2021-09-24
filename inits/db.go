@@ -2,44 +2,21 @@ package inits
 
 import (
 	"fmt"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 
-	"github.com/pkg/errors"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 var (
-	db       *gorm.DB
-	dbConfig *DbConfig
+	db *gorm.DB
 )
 
-type DbConfig struct {
-	Host     string `toml:"host"`
-	DbName   string `toml:"dbname"`
-	User     string `toml:"user"`
-	Password string `toml:"password"`
-	Sslmode  string `toml:"disable"`
-}
-
-func init() {
-	InitDbConfig()
-	InitDB()
-}
-
-func InitDbConfig() {
-	c := GetConfig()
-
-	dbConfig = &DbConfig{
-		Host:     c.GetString("database.host"),
-		DbName:   c.GetString("database.dbname"),
-		User:     c.GetString("database.user"),
-		Password: c.GetString("database.password"),
-		Sslmode:  c.GetString("database.sslmode"),
-	}
-}
-
 func InitDB() {
+	dbConfig := conf.DbConf
 
 	params := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=%s password=%s",
 		dbConfig.Host,

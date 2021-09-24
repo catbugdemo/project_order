@@ -1,18 +1,10 @@
 package inits
 
 import (
-	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
-)
 
-func TestConfig(t *testing.T) {
-	t.Run("GetConfig", func(t *testing.T) {
-		getConfig := GetConfig()
-		get := getConfig.Get("database.server")
-		fmt.Println(get)
-	})
-}
+	"github.com/stretchr/testify/assert"
+)
 
 func TestDB(t *testing.T) {
 	t.Run("DB", func(t *testing.T) {

@@ -1,37 +1,17 @@
 package inits
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/pkg/errors"
 	"net/http"
 	"time"
+
+	"github.com/catbugdemo/project_order/handler"
+	"github.com/gin-gonic/gin"
+	"github.com/pkg/errors"
 )
-
-var (
-	ginConfig *GinConfig
-)
-
-type GinConfig struct {
-	Port         string `toml:"port"`
-	ReadTimeout  int    `toml:"read_timeout"`
-	WriteTimeout int    `toml:"write_timeout"`
-}
-
-func InitHttp() {
-	InitGinConfig()
-	InitGin()
-}
-
-func InitGinConfig() {
-	c := GetConfig()
-	ginConfig = &GinConfig{
-		Port:         c.GetString("http.port"),
-		ReadTimeout:  c.GetInt("http.read_timeout"),
-		WriteTimeout: c.GetInt("http.write_timeout"),
-	}
-}
 
 func InitGin() {
+	ginConfig := conf.GinConf
+
 	router := gin.New()
 
 	router.Use(gin.Logger(), gin.Recovery())
@@ -39,6 +19,8 @@ func InitGin() {
 	router.GET("/version/", func(c *gin.Context) {
 		c.JSON(200, gin.H{"version": "v1.0.0"})
 	})
+
+	handler.Api(router)
 
 	s := &http.Server{
 		Addr:         ginConfig.Port,
@@ -49,7 +31,7 @@ func InitGin() {
 
 	if err := s.ListenAndServe(); err != nil {
 		if err == http.ErrServerClosed {
-			log.Println("http: Server Close:%+v", errors.WithStack(err))
+			log.Printf("http: Server Close:%+v\n", errors.WithStack(err))
 		}
 		log.Fatalf("http开启监听服务失败:%+v", errors.WithStack(err))
 	}

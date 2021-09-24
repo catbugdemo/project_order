@@ -1,43 +1,20 @@
 package inits
 
 import (
+	"time"
+
 	"github.com/gomodule/redigo/redis"
 	"github.com/pkg/errors"
-	"time"
 )
 
 var (
-	pool        *redis.Pool
-	redisConfig *RedisConfig
+	pool *redis.Pool
 )
-
-type RedisConfig struct {
-	Host      string `toml:"host"`
-	Password  string `toml:"passowrd"`
-	MaxIdle   int    `toml:"max_idle"`
-	MaxActive int    `toml:"max_active"`
-	Db        string `toml:"db"`
-}
-
-func init() {
-	InitRedisConfig()
-	InitRedisPool()
-}
-
-// InitRedisConfig 初始化缓存配置
-func InitRedisConfig() {
-	c := GetConfig()
-
-	redisConfig = &RedisConfig{
-		Host:      c.GetString("redis.host"),
-		Password:  c.GetString("redis.password"),
-		MaxIdle:   c.GetInt("redis.max_idle"),
-		MaxActive: c.GetInt("redis.max_active"),
-	}
-}
 
 // InitRedisPool 初始化缓存池
 func InitRedisPool() {
+	redisConfig := conf.RedisConf
+
 	pool = &redis.Pool{
 		//最大闲置连接
 		MaxIdle: redisConfig.MaxIdle,

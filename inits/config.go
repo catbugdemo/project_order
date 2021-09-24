@@ -1,20 +1,31 @@
 package inits
 
 import (
+	"sync"
+
 	"github.com/catbugdemo/project_order/utils/logger"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
-	"sync"
 )
 
 var (
 	config *viper.Viper
-	mu     sync.RWMutex
-	log    = logger.New()
+	conf   Conf
+
+	log = logger.New()
+
+	mu         sync.RWMutex
+	onceConf   sync.Once
+	onceStruct sync.Once
 )
 
 func init() {
-	InitConfig()
+	onceConf.Do(InitConfig)
+	onceStruct.Do(InitStructConfig)
+
+	InitDB()
+	InitRedisPool()
+	InitRocketMq()
 }
 
 func InitConfig() {
@@ -47,9 +58,30 @@ func ReadInConfig(v *viper.Viper) error {
 	return nil
 }
 
-// GetConfig 获取配置
-func GetConfig() *viper.Viper {
-	mu.RLock()
-	defer mu.RUnlock()
-	return config
+func InitStructConfig() {
+	conf.DbConf = &DbConf{
+		Host:     config.GetString("database.host"),
+		DbName:   config.GetString("database.dbname"),
+		User:     config.GetString("database.user"),
+		Password: config.GetString("database.password"),
+		Sslmode:  config.GetString("database.sslmode"),
+	}
+
+	conf.GinConf = &GinConf{
+		Port:         config.GetString("http.port"),
+		ReadTimeout:  config.GetInt("http.read_timeout"),
+		WriteTimeout: config.GetInt("http.write_timeout"),
+	}
+
+	conf.RedisConf = &RedisConf{
+		Host:      config.GetString("redis.host"),
+		Password:  config.GetString("redis.password"),
+		MaxIdle:   config.GetInt("redis.max_idle"),
+		MaxActive: config.GetInt("redis.max_active"),
+	}
+
+	conf.MqConf = &MqConf{
+		Server: config.GetStringSlice("server"),
+	}
+
 }
