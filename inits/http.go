@@ -20,7 +20,7 @@ func InitGin() {
 		c.JSON(200, gin.H{"version": "v1.0.0"})
 	})
 
-	handler.Api(router)
+	handler.API(router)
 
 	s := &http.Server{
 		Addr:         ginConfig.Port,
