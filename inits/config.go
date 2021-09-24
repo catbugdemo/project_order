@@ -28,6 +28,7 @@ func init() {
 	InitRocketMq()
 }
 
+// InitConfig 初始化配置
 func InitConfig() {
 	v := viper.New()
 	// 初始化配置信息
@@ -58,6 +59,7 @@ func ReadInConfig(v *viper.Viper) error {
 	return nil
 }
 
+// InitStructConfig 初始化结构体
 func InitStructConfig() {
 	conf.DbConf = &DbConf{
 		Host:     config.GetString("database.host"),

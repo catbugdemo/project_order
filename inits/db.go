@@ -2,11 +2,10 @@ package inits
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
-
-	"time"
+	_ "github.com/jinzhu/gorm/dialects/postgres" // postgres driver
 
 	"github.com/pkg/errors"
 )
@@ -44,7 +43,7 @@ func InitDB() {
 	db = open
 }
 
-// 获取数据库
+// DB 获取数据库
 func DB() *gorm.DB {
 	return db
 }
