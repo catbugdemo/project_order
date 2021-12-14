@@ -1,6 +1,7 @@
 package inits
 
 import (
+	"github.com/catbugdemo/project_order/log"
 	"time"
 
 	"github.com/gomodule/redigo/redis"
@@ -25,22 +26,22 @@ func InitRedisPool() {
 			c, err := redis.Dial("tcp", redisConfig.Host)
 			if err != nil {
 				c.Close()
-				log.Printf("fail to dial redis: %+v\n", errors.WithStack(err))
+				log.Fatalf("Err dial redis: %+v\n", errors.WithStack(err))
 				return nil, err
 			}
 			//密码认证
 			if redisConfig.Password != "" {
 				if _, err = c.Do("AUTH", redisConfig.Password); err != nil {
 					c.Close()
-					log.Printf("fail to auth redis: %+v\n", errors.WithStack(err))
+					log.Fatalf("Err auth redis: %+v\n", errors.WithStack(err))
 					return nil, err
 				}
 			}
 			//redis 缓存数据库认证
-			if redisConfig.Db != "" {
+			if redisConfig.Db != 0 {
 				if _, err = c.Do("SELECT", redisConfig.Db); err != nil {
 					c.Close()
-					log.Printf("fail to SELECT DB redis: %+v\n", errors.WithStack(err))
+					log.Fatalf("Err SELECT DB redis: %+v\n", errors.WithStack(err))
 					return nil, err
 				}
 			}
@@ -51,7 +52,7 @@ func InitRedisPool() {
 			_, err := c.Do("PING")
 			if err != nil {
 				c.Close()
-				log.Printf("fail to ping redis: %+v\n", err)
+				log.Fatalf("Err ping redis: %+v\n", err)
 				return err
 			}
 			return nil

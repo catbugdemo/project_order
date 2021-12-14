@@ -2,6 +2,7 @@ package inits
 
 import (
 	"fmt"
+	"github.com/catbugdemo/project_order/log"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -17,12 +18,12 @@ var (
 func InitDB() {
 	dbConfig := conf.DbConf
 
-	params := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=%s password=%s",
+	params := fmt.Sprintf("host=%s user=%s dbname=%s password=%s sslmode=%s",
 		dbConfig.Host,
 		dbConfig.User,
 		dbConfig.DbName,
-		dbConfig.Sslmode,
 		dbConfig.Password,
+		dbConfig.Sslmode,
 	)
 
 	open, err := gorm.Open("postgres", params)
